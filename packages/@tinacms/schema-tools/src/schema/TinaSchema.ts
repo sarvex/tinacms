@@ -9,7 +9,6 @@ import {
   Collectable,
   CollectionTemplateable,
   TinaField,
-  ObjectField,
 } from '../types/index'
 import { lastItem, assertShape } from '../util'
 import { normalizePath } from '../util/normalizePath'
@@ -38,6 +37,24 @@ export class TinaSchema {
   constructor(public config: { version?: Version; meta?: Meta } & Schema) {
     // @ts-ignore
     this.schema = config
+    this.schema.collections.forEach((collection) => {
+      if (!collection.singleFile) {
+        return
+      }
+      if (!collection?.fields?.map((f) => f.name).includes('_id_')) {
+        const idField: TinaField<true> = {
+          name: '_id_',
+          type: 'string',
+          label: 'Path',
+          indexed: true,
+          searchable: true,
+          required: true,
+          namespace: [...collection.namespace, '_id_'],
+        }
+        collection.fields = [idField, ...collection.fields]
+      }
+    })
+
     this.walkFields(({ field, collection, path }) => {
       // set defaults for field searchability
       if (!('searchable' in field)) {
@@ -87,6 +104,7 @@ export class TinaSchema {
         extraFields['templates'] = templateInfo.templates
         break
     }
+
     return {
       // @ts-ignore FIXME: backwards compatibility, using `slug` should probably be deprecated
       slug: collection.name,
@@ -108,16 +126,21 @@ export class TinaSchema {
 
     const possibleCollections = this.getCollections().filter((collection) => {
       // filter out file extensions that don't match the collection format
-      if (fileExtension !== (collection.format || 'md')) {
+      if (
+        !collection.singleFile &&
+        fileExtension !== (collection.format || 'md')
+      ) {
         return false
       }
-      if (collection?.match?.include || collection?.match?.exclude) {
-        // if the collection has a match or exclude, we need to check if the file matches
-        const matches = this.getMatches({ collection })
-        const match = picomatch.isMatch(normalizedPath, matches)
+      if (!collection.singleFile) {
+        if (collection?.match?.include || collection?.match?.exclude) {
+          // if the collection has a match or exclude, we need to check if the file matches
+          const matches = this.getMatches({ collection })
+          const match = picomatch.isMatch(normalizedPath, matches)
 
-        if (!match) {
-          return false
+          if (!match) {
+            return false
+          }
         }
       }
       // add / to the end of the path if it is not "''"

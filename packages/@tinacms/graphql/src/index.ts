@@ -26,6 +26,8 @@ export { getChangedFiles, getSha, shaExists } from './git'
 export { sequential, assertShape } from './util'
 export {
   loadAndParseWithAliases,
+  bridgeDataLoader,
+  csvDataLoader,
   stringifyFile,
   parseFile,
   scanAllContent,

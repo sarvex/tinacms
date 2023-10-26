@@ -729,6 +729,13 @@ interface BaseCollection {
     include?: string
     exclude?: string
   }
+  singleFile?: {
+    pathField: string
+  }
+  media?: {
+    idField: string
+    pathField: string
+  }
 }
 
 type TemplateCollection<WithNamespace extends boolean = false> = {
