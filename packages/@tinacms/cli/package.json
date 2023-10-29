@@ -105,7 +105,7 @@
     "node-fetch": "2",
     "normalize-path": "^3.0.0",
     "postcss": "^8.3.3",
-    "prettier": "^2.2.1",
+    "prettier": "2.7.1",
     "progress": "^2.0.3",
     "prompts": "^2.4.1",
     "readable-stream": "^4.3.0",
