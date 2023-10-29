@@ -24,12 +24,12 @@
   },
   "devDependencies": {
     "@tinacms/scripts": "workspace:*",
-    "@types/micromatch": "^4.0.2",
-    "@types/yup": "^0.29.10",
-    "jest": "^29.5.0",
+    "@types/micromatch": "4.0.2",
+    "@types/yup": "0.29.14",
+    "jest": "29.5.0",
     "react": "17.0.2",
     "typescript": "4.3.5",
-    "yup": "^0.32.0"
+    "yup": "0.32.11"
   },
   "peerDependencies": {
     "react": ">=16.14.0",
@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "picomatch-browser": "2.2.6",
-    "url-pattern": "^1.0.3",
+    "url-pattern": "1.0.3",
     "zod": "^3.14.3"
   }
 }
